@@ -38,24 +38,20 @@ class DataEmitter {
     }
 }
 
-function createObservable() {
-    return ({
-        subscribe(onNext, onError, onComplete) {
-            const datasource = new DataEmitter();
+function createObservable(observer) {
+    const datasource = new DataEmitter();
+    datasource.ondata = e => observer.next(e);
+    datasource.oncomplete = () => observer.complete();
 
-            datasource.ondata = onNext;
-            datasource.oncomplete = onComplete;
-
-            return () => datasource.destroy();
-        }
-    });
+    return () => {
+        datasource.destroy();
+    };
 }
 
-const destroy = createObservable()
-    .subscribe(
-        value => console.log(value),
-        err => console.error(err),
-        () => console.log('end')
-    );
+const destroy = createObservable({
+    next: value => console.log(value),
+    error: err => console.error(err),
+    complete: () => console.log('end')
+});
 
-// setTimeout(destroy, 1500);
+setTimeout(destroy, 1500);
