@@ -3,18 +3,16 @@ const reactions = {};
 const accessedObservableKeys = [];
 
 function observable(obj) {
-    const localObj = {...obj};
     const observableId = `ObservableMap@${observablesCount++}`;
 
     const observableObject = {
         set: (key, value) => {
-            localObj[key] = value;
+            obj[key] = value;
             (reactions[`${observableId}|${key}`] || []).forEach(reaction => reaction());
         },
     }
 
-    Object
-        .keys(localObj)
+    Object.keys(obj)
         .forEach(key => {
             Object.defineProperty(
                 observableObject,
@@ -22,8 +20,14 @@ function observable(obj) {
                 {
                     get: function() {
                         accessedObservableKeys.push(`${observableId}|${key}`);
-                        return localObj[key];
-                    },
+
+                        const getter = Object.getOwnPropertyDescriptor(obj, key).get;
+                        if (getter) {
+                            // computed
+                            return getter();
+                        }
+                        return obj[key];
+                    }
                 }
             );
         });
@@ -31,18 +35,24 @@ function observable(obj) {
     return observableObject;
 }
 
-function autorun(reactionRunner) {
+function track(func) {
     accessedObservableKeys.length = 0;
-    reactionRunner();
+    func();
 
     const localAccessedObservableKeys = [...accessedObservableKeys];
-    localAccessedObservableKeys.forEach(accessedObservableKey => {
+    return localAccessedObservableKeys;
+}
+
+function autorun(reactionRunner) {
+    const trackedAccesses = track(reactionRunner);
+
+    trackedAccesses.forEach(accessedObservableKey => {
         reactions[accessedObservableKey] = reactions[accessedObservableKey] || [];
         reactions[accessedObservableKey].push(reactionRunner);
     });
 
     return () => {
-        localAccessedObservableKeys.forEach(accessedObservableKey => {
+        trackedAccesses.forEach(accessedObservableKey => {
             reactions[accessedObservableKey] = reactions[accessedObservableKey].filter(
                 func => func != reactionRunner
             );
@@ -62,6 +72,12 @@ const album2 = observable({
     playCount: 0
 });
 
+const library = observable({
+    get allPlayCount() {
+        return album1.playCount + album2.playCount;
+    }
+});
+
 const dispose1 = autorun(() => {
     console.log(`Ok Computer play count: ${album1.playCount}`);
 });
@@ -70,10 +86,15 @@ const dispose2 = autorun(() => {
     console.log(`In Rainbows play count: ${album2.playCount}`);
 });
 
-console.log('--end--');
+const dispose3 = autorun(() => {
+    console.log(`All count: ${library.allPlayCount}`);
+});
 
-dispose1();
-dispose2();
+console.log('----start-reactions----');
+
+// dispose1();
+// dispose2();
+// dispose2();
 album1.set('playCount', 2);
 album2.set('playCount', 20);
 album2.set('playCount', 300);
