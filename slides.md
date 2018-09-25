@@ -101,3 +101,18 @@ MobX Observables
 [TFRP Discussion](https://github.com/mobxjs/mobx/issues/220)
 
 [Building Observables - Ben Lesh](https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87)
+
+https://medium.com/@mweststrate/pure-rendering-in-the-light-of-time-and-state-4b537d8d40b1
+https://hackernoon.com/becoming-fully-reactive-an-in-depth-explanation-of-mobservable-55995262a254
+https://github.com/mobxjs/mobx/issues/248
+
+[Building yur own Observable](https://toddmotto.com/rxjs-observables-observers-operators)
+https://github.com/mobxjs/mobx/wiki/Mobx-vs-Reactive-Stream-Libraries-(RxJS,-Bacon,-etc)
+
+
+
+
+
+
+
+

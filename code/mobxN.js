@@ -1,17 +1,24 @@
-let observablesCount = 0;
 const reactions = {};
 const accessedObservableKeys = [];
 
 function observable(obj) {
-    const observableId = `ObservableMap@${observablesCount++}`;
+    // generate observable ids
+    const observablePrefix = `ObservableMap@${Math.random()}`;
+    function getObservableId(key) {
+        return `${observablePrefix}|${key}`; // ObservableMap@0.6101384306883373|playCount
+    }
 
+    // on every set, trigger all the reactions
     const observableObject = {
         set: (key, value) => {
             obj[key] = value;
-            (reactions[`${observableId}|${key}`] || []).forEach(reaction => reaction());
+            (reactions[getObservableId(key)] || []).forEach(
+                reaction => reaction()
+            );
         },
     }
 
+    // on every get track accessed
     Object.keys(obj)
         .forEach(key => {
             Object.defineProperty(
@@ -19,13 +26,13 @@ function observable(obj) {
                 key,
                 {
                     get: function() {
-                        accessedObservableKeys.push(`${observableId}|${key}`);
+                        accessedObservableKeys.push(getObservableId(key));
 
-                        const getter = Object.getOwnPropertyDescriptor(obj, key).get;
-                        if (getter) {
-                            // computed
-                            return getter();
-                        }
+                        // // computed
+                        // const getter = Object.getOwnPropertyDescriptor(obj, key).get;
+                        // if (getter) {
+                            // return getter();
+                        // }
                         return obj[key];
                     }
                 }
@@ -38,25 +45,36 @@ function observable(obj) {
 function track(func) {
     accessedObservableKeys.length = 0;
     func();
-
-    const localAccessedObservableKeys = [...accessedObservableKeys];
-    return localAccessedObservableKeys;
+    return accessedObservableKeys;
 }
 
 function autorun(reactionRunner) {
+    console.log('');
     const trackedAccesses = track(reactionRunner);
+    console.log('autorun', trackedAccesses);
 
+    // add reaction for every observable
     trackedAccesses.forEach(accessedObservableKey => {
+        // console.log('====> tracking accessedObservableKey: ', accessedObservableKey);
         reactions[accessedObservableKey] = reactions[accessedObservableKey] || [];
         reactions[accessedObservableKey].push(reactionRunner);
     });
 
     return () => {
+        // dismiss reaction for every observable
         trackedAccesses.forEach(accessedObservableKey => {
             reactions[accessedObservableKey] = reactions[accessedObservableKey].filter(
                 func => func != reactionRunner
             );
         });
+    }
+}
+
+function computed(computedFunction) {
+    return {
+        get() {
+            return computedFunction();
+        }
     }
 }
 
@@ -72,11 +90,7 @@ const album2 = observable({
     playCount: 0
 });
 
-const library = observable({
-    get allPlayCount() {
-        return album1.playCount + album2.playCount;
-    }
-});
+const allPlayCount = computed(() => album1.playCount + album2.playCount);
 
 const dispose1 = autorun(() => {
     console.log(`Ok Computer play count: ${album1.playCount}`);
@@ -87,14 +101,17 @@ const dispose2 = autorun(() => {
 });
 
 const dispose3 = autorun(() => {
-    console.log(`All count: ${library.allPlayCount}`);
+    console.log(`All Album play count: ${allPlayCount.get()}`);
 });
 
+
+console.log('');
 console.log('----start-reactions----');
+console.log('');
 
 // dispose1();
 // dispose2();
-// dispose2();
+//
 album1.set('playCount', 2);
 album2.set('playCount', 20);
-album2.set('playCount', 300);
+// album2.set('playCount', 300);
