@@ -2,35 +2,36 @@
 # [fit] Long live __MobX__
 
 
-[.footer: Hello Hello Hello Hello ]
+[.footer: @_maxgallo ]
+
+---
+
+![right](images/me.jpg)
+
+# Hi 👋🏻
+#[fit] I'm __Max__* Gallo
+
+_About me:_ 🍝 💻 🇬🇧 🎶 🏍 📷 ✈️ ✍️
+
+_Principal Engineer_ @ DAZN
+
+<br />
+
+_twitter:_ @\_maxgallo
+_more:_ maxgallo.io
+
+[.footer: or __Massimiliano__, if you like italian spelling challenges]
 
 ---
 
 [.build-lists: true]
 
-## Here's __the plan__
-
-- Reactive Programming
-- Context
-- RxJS intro
-- MobX intro
-- Same problem, two solution (compare the implementation)
-- Re-implementing from scratch
-- Best tool for the job
-- One for all, and all for one (both in the same repo)
-- Takeaways
-
----
-
-# [fit] __Reactive__ Programming
-#### [fit] _not another indroduction to reactive programming_
-
----
-
-## [fit] _Reactive programming is a story about_
-# [fit] __Producers__
-### and
-# [fit] __Consumers__
+#[fit] _Here's_ __the plan__
+<br/>
+  
+1. Diassemble _the libraries_
+- Analyse _the implementation_
+- Understand _the benefits_
 
 ---
 
@@ -43,25 +44,135 @@
 
 ---
 
-# RxJS intro
+# Disassemble
+
+---
+
+# **Story**
+
+Photo of myself disassemblying something.
+
+Story about when some smoke went out from the VHS Recorder I was "Repairing".
+
+Since then I've always been curious about how things are made inside
+
+---
+
+# __MobX__ code
 
 ```javascript
+const { observable, autorun } = require('./lib/mobx.js');
 
-const { of } = rxjs;
-const { map } = rxjs.operators;
+const album1 = observable({
+    title: "OK Computer",
+    year: 1997,
+    playCount: 0
+});
 
-of(1,2,3).pipe(map(x => x + '!!!'));
+autorun(() => {
+	console.log(`Album 1 PlayCount: ${album1.playCount}`)
+});
+
+album1.playCount = 2;  // Alubm 1 PlayCount: 2
+album1.playCount = 20; // Alubm 1 PlayCount: 20
 ```
 
 ---
+
+# __MobX__ Live coding
+
+---
+
+# __MobX__ implementation
+
+- Syntax is close to language
+- Doesn't care about the past
+- Transparent Functional Reactive Programming
+- Lazy evaluation, no autorun no party
+- Synchronous
+
+---
+
+# __MobX *Deep Dive*__ 
+##[fit] Transparent Functional Reactive Programming
+
+```javascript
+autorun(() => {
+	if (dinner.isReady) {
+		shout('Dinner is ready')
+	} 
+});
+```
+
+_No explicit subscribe_
+
+---
+
+# __RxJS__ code
+
+```javascript
+const { from } = require('rxjs');
+const { map, filter } = require('rxjs/operators');
+
+const observable = from([1, 2, 3, 4, 5])
+    .pipe(
+        map(x => x + 1),
+        map(x => x - 1),
+        filter(x => x % 2 === 0),
+        map(x => x * 100)
+    );
+
+observable.subscribe(
+    value => console.log('next:', value),
+    error => console.error(error),
+    () => console.log(),
+);
+```
+
+---
+
+# __RxJS__ Live coding
+
+---
+
+# __RxJS__ implementation
+
+- Made up reusable components -> Streams
+- Flexibility with custom operators
+- Lazy evaluation, no emit before subscribe
+- Synchronous by default (can be async too, schedulers)
+- Cold Observables (and Hot)
+
+---
+
+# __RxJS Deep Dive:__ Observables
+Cold & Hot Observables
+
+If the producer is inside the observer, then it's cold, if it's outside it's hot.
+
+_(in MobX everything is hot)_
+
+---
+
+# All together
+
+| | __Paradigm__ | __Synchrounicity__ | __Syntax__ | __Observables__ |
+| :---: | :---: | :---: | :---: | :---: |
+| __RxJS__ | _Reactive Streams_ | _Synch by default & Schedulers_  | _Custom (pipable operators)_ | _Cold & Hot Observables_ | 
+| __MobX__ | _Transparent Functional Reactive Programming_ | _Synchronous_ | _Close to Language_ | _Only Hot_ |
+
+---
+
+# Common ideas
+
+- Syncronous by default
+
 
 
 ---
 
 # __MobX__ intro
-## _Transparent Reactive Programming
-
-Transparent reactive programming
+## Transparent Reactive Programming
 
 ```javascript
 import { observable, autorun } from 'mobx';
@@ -85,7 +196,15 @@ starman.playCount += 1; // Starman new play count: 3
 
 ---
 
-# Observables
+# One for all,
+# and all for one
+
+- Performance
+
+
+---
+
+# TakeAways
 
 MobX Observables
 
