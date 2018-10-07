@@ -1,4 +1,4 @@
-const { observable, autorun } = require('./lib/mobx.js');
+const { observable, autorun } = require('mobx');
 
 const album1 = observable({
     title: "OK Computer",
