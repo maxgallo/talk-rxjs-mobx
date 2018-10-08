@@ -29,13 +29,9 @@ _more:_ maxgallo.io
 #[fit] _Here's_ __the plan__
 <br/>
   
-1. Diassemble _the libraries_
-- Analyse _the implementation_
-- Understand _the benefits_
-
----
-
-# Disassemble
+1. _Reinventing_ MobX
+- _Reinventing_ RxJS
+- All _for_ One _and_ One _for_ All
 
 ---
 
@@ -46,6 +42,10 @@ Photo of myself disassemblying something.
 Story about when some smoke went out from the VHS Recorder I was "Repairing".
 
 Since then I've always been curious about how things are made inside
+
+---
+
+#[fit] Reinventing __MobX__
 
 ---
 
@@ -70,16 +70,32 @@ album1.playCount = 20; // Alubm 1 PlayCount: 20
 
 ---
 
-# __MobX__ Live coding
+# __MobX__ considerations
+
+- Syntax is close to language
+- __Transparent__ Functional Reactive Programming
 
 ---
 
-# __MobX__ implementation
+_let's reinvent_ MobX
 
-- Syntax is close to language
+---
+
+# __MobX__ from the inside
+
 - Doesn't care about the past
-- __Transparent__ Functional Reactive Programming
+- I can change my observable can change even if I don't observe it
 - Synchronous
+
+---
+
+# __MobX Deep Dive:__ Computed Properties
+
+TODO
+
+---
+
+#[fit] Reinventing __RxJS__
 
 ---
 
@@ -92,35 +108,41 @@ const { map, filter } = require('rxjs/operators');
 const observable = from([1, 2, 3, 4, 5])
     .pipe(
         map(x => x + 1),
-        map(x => x - 1),
         filter(x => x % 2 === 0),
-        map(x => x * 100)
+        map(x => x - 1),
     );
 
 observable.subscribe(
-    value => console.log('next:', value),
+    val => console.log('odd: ', val),
     error => console.error(error),
-    () => console.log('On Complete'),
+    () => console.log('Completed!'),
 );
+// odd: 1, odd: 2, odd: 3, odd: 4, odd: 5, Completed!
 ```
+---
+
+# __RxJS__ considerations
+
+- Syntax is less familiar than MobX
+
 
 ---
 
-# __RxJS__ Live coding
+_let's reinvent_ RxJS
 
 ---
 
-# __RxJS__ implementation
+# __RxJS__ from the inside
 
-- Made up reusable components -> Streams
+- Made up reusable parts -> Streams
 - Flexibility with custom operators
 - Lazy evaluation, no emit before subscribe
 - Synchronous by default (can be async too, schedulers)
-- Cold Observables (and Hot)
 
 ---
 
-# __RxJS Deep Dive:__ Observables
+# __RxJS Deep Dive:__ Cold & Hot
+
 Cold & Hot Observables
 
 If the producer is inside the observer, then it's cold, if it's outside it's hot.
@@ -129,7 +151,15 @@ _(in MobX everything is hot)_
 
 ---
 
-# All together
+# __RxJS Deep Dive:__ Schedulers
+
+RxJS is synchronous by default, but can be async too, and can handle a virtual time
+
+This is due to schedulers!
+
+---
+
+# Recap
 
 | | __Paradigm__ | __Synchrounicity__ | __Syntax__ | __Observables__ |
 | :---: | :---: | :---: | :---: | :---: |
@@ -138,60 +168,12 @@ _(in MobX everything is hot)_
 
 ---
 
-# Common ideas
-
-- Syncronous by default
-
-
-
----
-
-# __MobX__ intro
-## Transparent Reactive Programming
-
-```javascript
-import { observable, autorun } from 'mobx';
-
-class Song {
-    @observable playCount = 0;
-}
-
-const starman = new Song();
-
-autorun(() => {
-    console.log(`Starman new play count: ${starman.playCount}`);
-    // Starman new play count: 0
-});
-
-starman.playCount += 1; // Starman new play count: 1
-starman.playCount += 1; // Starman new play count: 2
-starman.playCount += 1; // Starman new play count: 3
-
-```
-
----
-
-# One for all,
-# and all for one
-
-- Performance
-
-
----
-
-
 # Context
 
 | | __*First commit*__ | __*GitHub Stars*__ | __*Weekly Downloads*__ | __*Latest Version*__ |
 | :---: | :---: | :---: | :---: | :---: |
 | __RxJS__ | _Sep_ 2012 | 14,794 | 3,849,604 | 6.3.2 |
 | __MobX__ | _Mar_ 2015 | 16,779 | 170,615 | 5.1.1 |
-
----
-
-# TakeAways
-
-MobX Observables
 
 
 ---
