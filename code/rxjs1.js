@@ -1,81 +1,71 @@
 // const { from } = require('rxjs');
 // const { map, filter } = require('rxjs/operators');
 
-// 1 - from, pipe with 1 map
-// 2 - multiple maps
-// 3 - filter
-
-function from(elementArray) {
+function from(initialData) {
     return {
-        pipe: (...functions) => ({
-            subscribe: (onNext, onError, onComplete) => {
+        pipe: (...pipeFunctions) => {
+            return {
+                subscribe: (onNext, onError, onComplete) => {
+                    const dataObservable = createObservable(x => initialData.forEach(x))
 
-                const dataObservable = {
-                    subscribe: (onNext) => {
-                        elementArray.forEach(onNext);
-                    }
+                    let currentObservable = dataObservable;
+
+                    pipeFunctions.forEach(pipeFunc => {
+                        currentObservable = pipeFunc(currentObservable);
+                    });
+
+                    currentObservable.subscribe(onNext);
+                    onComplete();
                 }
-
-                let observable = dataObservable;
-
-                for (let i in functions) {
-                    const pipeFunc = functions[i];
-                    observable = pipeFunc(observable)
-                }
-
-                observable.subscribe(onNext);
-
-                onComplete();
-            },
-        }),
+            }
+        }
     }
 }
 
 function createObservable(operator) {
     return {
-        subscribe: onNext => operator(onNext),
+        subscribe: onNext => {
+            operator(onNext);
+        }
     }
 }
 
 function map(mapFunction) {
     return sourceObservable => {
-        const observable = createObservable(destinationNext => {
+        return createObservable(destinationNext => {
             sourceObservable.subscribe(
-                x => {
-                    const y = mapFunction(x)
-                    destinationNext(y);
+                value => {
+                    const newValue = mapFunction(value);
+                    destinationNext(newValue);
                 }
-            )
-        });
-        return observable;
+            );
+        })
     }
 }
 
 function filter(filterFunction) {
     return sourceObservable => {
-        const observable = createObservable(destinationNext => {
+        return createObservable(destinationNext => {
             sourceObservable.subscribe(
-                x => {
-                    if (filterFunction(x)) {
-                        destinationNext(x);
+                value => {
+                    if (filterFunction(value)) {
+                        destinationNext(value);
                     }
                 }
             )
-        });
-        return observable;
+        })
     }
 }
 
 const observable = from([1, 2, 3, 4, 5])
     .pipe(
         map(x => x + 1),
-        map(x => x - 1),
         filter(x => x % 2 === 0),
-        map(x => x * 100),
+        map(x => x - 1),
     );
 
 observable.subscribe(
-    val => console.log('two-', val),
+    val => console.log('odd: ', val),
     error => console.error(error),
-    () => console.log(),
+    () => console.log('Completed!'),
 );
