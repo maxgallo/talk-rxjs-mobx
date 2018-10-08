@@ -35,15 +35,6 @@ _more:_ maxgallo.io
 
 ---
 
-# Context
-
-| | __*First commit*__ | __*GitHub Stars*__ | __*Weekly Downloads*__ | __*Latest Version*__ |
-| :---: | :---: | :---: | :---: | :---: |
-| __RxJS__ | _Sep_ 2012 | 14,794 | 3,849,604 | 6.3.2 |
-| __MobX__ | _Mar_ 2015 | 16,779 | 170,615 | 5.1.1 |
-
----
-
 # Disassemble
 
 ---
@@ -87,24 +78,8 @@ album1.playCount = 20; // Alubm 1 PlayCount: 20
 
 - Syntax is close to language
 - Doesn't care about the past
-- Transparent Functional Reactive Programming
-- Lazy evaluation, no autorun no party
+- __Transparent__ Functional Reactive Programming
 - Synchronous
-
----
-
-# __MobX *Deep Dive*__ 
-##[fit] Transparent Functional Reactive Programming
-
-```javascript
-autorun(() => {
-	if (dinner.isReady) {
-		shout('Dinner is ready')
-	} 
-});
-```
-
-_No explicit subscribe_
 
 ---
 
@@ -125,7 +100,7 @@ const observable = from([1, 2, 3, 4, 5])
 observable.subscribe(
     value => console.log('next:', value),
     error => console.error(error),
-    () => console.log(),
+    () => console.log('On Complete'),
 );
 ```
 
@@ -201,6 +176,16 @@ starman.playCount += 1; // Starman new play count: 3
 
 - Performance
 
+
+---
+
+
+# Context
+
+| | __*First commit*__ | __*GitHub Stars*__ | __*Weekly Downloads*__ | __*Latest Version*__ |
+| :---: | :---: | :---: | :---: | :---: |
+| __RxJS__ | _Sep_ 2012 | 14,794 | 3,849,604 | 6.3.2 |
+| __MobX__ | _Mar_ 2015 | 16,779 | 170,615 | 5.1.1 |
 
 ---
 
