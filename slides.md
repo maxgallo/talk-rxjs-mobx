@@ -3,6 +3,8 @@
 
 
 [.footer: @_maxgallo ]
+^ - rise your hand if you use RxJS in production
+- rise your hand if you use MobX in production
 
 ---
 
@@ -35,16 +37,22 @@ _more:_ maxgallo.io
 
 ---
 
-# **Story**
+![right](images/me1996.jpg)
 
-Photo of myself disassemblying something.
+# [fit] Reinventing
+## [fit] the weel
 
-Story about when some smoke went out from the VHS Recorder I was "Repairing".
+## _by_
 
-Since then I've always been curious about how things are made inside
+# __taking things apart__
+
+^ - This is me when I was six
+- I like to understand things by taking them apart
+- and watch inside to understand how they work
 
 ---
 
+![fill](images/bg.jpg)
 #[fit] Reinventing __MobX__
 
 ---
@@ -52,49 +60,78 @@ Since then I've always been curious about how things are made inside
 # __MobX__ code
 
 ```javascript
-const { observable, autorun } = require('./lib/mobx.js');
+const { observable, autorun } = require('mobx');
 
-const album1 = observable({
+const okComputer = observable({
     title: "OK Computer",
     year: 1997,
     playCount: 0
 });
 
 autorun(() => {
-	console.log(`Album 1 PlayCount: ${album1.playCount}`)
-});
+	console.log(`Ok Computer PlayCount: ${okComputer.playCount}`)
+}); // Ok Computer PlayCount: 0
 
-album1.playCount = 2;  // Alubm 1 PlayCount: 2
-album1.playCount = 20; // Alubm 1 PlayCount: 20
+okComputer.playCount = 2;  // Ok Computer PlayCount: 2
+okComputer.playCount = 20; // Ok Computer PlayCount: 20
 ```
 
 ---
 
-# __MobX__ considerations
+# __MobX__ code _first impressions_
 
-- Syntax is close to language
-- __Transparent__ Functional Reactive Programming
+<br/>
 
----
-
-_let's reinvent_ MobX
-
----
-
-# __MobX__ from the inside
-
-- Doesn't care about the past
-- I can change my observable can change even if I don't observe it
-- Synchronous
+- Syntax _is close to the language_
+- _No explicit_ Subscription
+- trasparent _functional reactive programming_ 
 
 ---
 
-# __MobX Deep Dive:__ Computed Properties
-
-TODO
+💡 _let's reinvent_ MobX 
 
 ---
 
+# __MobX__ *from the* inside
+
+- _Doesn't care about the_ past
+- _act as a_ proxy in front of JavaScript
+- _All reactions are_ Synchronous
+- Derivation Graph
+
+---
+
+# __MobX *Deep Dive*__  Computed Properties
+
+[.code-highlight: 9-14]
+
+```javascript
+const { observable, autorun, computed } = require('mobx');
+
+const okComputer = observable({
+    title: "OK Computer",
+    year: 1997,
+    playCount: 0
+});
+
+const allInfo = computed(() => okComputer.title + okComputer.playCount);
+
+autorun(() => { console.log(allInfo) }); // Ok Computer0
+
+okComputer.playCount = 2;  // Ok Computer2
+okComputer.playCount++;    // Ok Computer3
+```
+
+
+---
+
+# __MobX *Deep Dive*__ Derivation Graph
+
+![inline](diagrams/derivationGraph/derivationGraph.pdf)
+
+---
+
+![fill](images/bg.jpg)
 #[fit] Reinventing __RxJS__
 
 ---
@@ -117,84 +154,122 @@ observable.subscribe(
     error => console.error(error),
     () => console.log('Completed!'),
 );
-// odd: 1, odd: 2, odd: 3, odd: 4, odd: 5, Completed!
+// odd: 1, odd: 3, odd: 5, Completed!
 ```
 ---
 
-# __RxJS__ considerations
+# __RxJS__ code _first impressions_
+<br/>
 
-- Syntax is less familiar than MobX
-
-
----
-
-_let's reinvent_ RxJS
-
----
-
-# __RxJS__ from the inside
-
-- Made up reusable parts -> Streams
-- Flexibility with custom operators
-- Lazy evaluation, no emit before subscribe
-- Synchronous by default (can be async too, schedulers)
+- Syntax _is less familiar than MobX_
+- Explicit Subscription
+- Observable _[TC39 stage 1](https://github.com/tc39/proposals#stage-1)_
+- Pipeline operator _[TC39 stage 1](https://github.com/tc39/proposals#stage-1)_
 
 ---
 
-# __RxJS Deep Dive:__ Cold & Hot
-
-Cold & Hot Observables
-
-If the producer is inside the observer, then it's cold, if it's outside it's hot.
-
-_(in MobX everything is hot)_
+💡 _let's reinvent_ RxJS
 
 ---
 
-# __RxJS Deep Dive:__ Schedulers
+# __RxJS__ *from the inside*
 
-RxJS is synchronous by default, but can be async too, and can handle a virtual time
+<br />
 
-This is due to schedulers!
+- _Made of_ reusable parts > **Streams**
+- custom operators
+- Lazy evaluation
+- Synchronous _by default_ > **Schedulers**
+
+<!--
 
 ---
 
-# Recap
+# __RxJS *Deep Dive*__ Cold & Hot Observables
 
-| | __Paradigm__ | __Synchrounicity__ | __Syntax__ | __Observables__ |
+❄️ Cold Observable _The producer is inside the observer_ 
+
+🔥 Hot Observable _The producer is outside the observer_
+
+-->
+
+---
+
+# __RxJS *Deep Dive*__ Schedulers
+
+> Schedulers in RxJS are things that control the order of event emissions (to Observers) and the speed of those event emissions.
+-- André Staltz
+
+<br />
+<br />
+Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
+
+---
+
+![fill](images/bg.jpg)
+#[fit] All _for_ One _and_ One _for_ All
+
+---
+
+# Side _by_ Side
+
+| | __Paradigm__ | __Execution__ | __Syntax__ | __Observables__ |
 | :---: | :---: | :---: | :---: | :---: |
-| __RxJS__ | _Reactive Streams_ | _Synch by default & Schedulers_  | _Custom (pipable operators)_ | _Cold & Hot Observables_ | 
-| __MobX__ | _Transparent Functional Reactive Programming_ | _Synchronous_ | _Close to Language_ | _Only Hot_ |
+| __MobX__ | Transparent _Functional Reactive Programming_ | _Synchronous_ | _Plain Javascript_ | _Observable Values_ |
+| __RxJS__ | Event Stream _Functional Reactive Programming_ | _Synchronous & Asynchronous_  | _Custom*_ | _Observable Events_ | 
 
 ---
 
-# Context
+[.build-lists: true]
 
-| | __*First commit*__ | __*GitHub Stars*__ | __*Weekly Downloads*__ | __*Latest Version*__ |
-| :---: | :---: | :---: | :---: | :---: |
-| __RxJS__ | _Sep_ 2012 | 14,794 | 3,849,604 | 6.3.2 |
-| __MobX__ | _Mar_ 2015 | 16,779 | 170,615 | 5.1.1 |
+#[fit] When _should I use_ __MobX__ ?
+
+- learning curve
+- values, _not events_
+- _Easy representation of_ application state
+- state = __derivation (__ _previous State_ __)__
+
+---
+
+[.build-lists: true]
+#[fit] When _should I use_ __RxJS__ ?
+- events & values
+- _work with_ time
+- heavy __I/O__ tasks
+- low-level control
 
 
 ---
 
-# Links
+#[fit] When _should I use_ __both__ ?
 
-[Reactive Programming Introduction - André Stalz](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
 
-[Transparent Reactive Programming (meteor)](https://github.com/meteor/docs/blob/version-NEXT/long-form/tracker-manual.md)
+1. **RxJS** _handles an_ Heavy Task
+2. _it changes the_ Application State, _managed by_ **MobX**
+3. Reaction: _the view is updated_
 
-[TFRP Discussion](https://github.com/mobxjs/mobx/issues/220)
+---
 
-[Building Observables - Ben Lesh](https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87)
+### [fit] When _should I use_ __both__ ? 
+#[fit] __real life__
+#[fit] __example__
 
-https://medium.com/@mweststrate/pure-rendering-in-the-light-of-time-and-state-4b537d8d40b1
-https://hackernoon.com/becoming-fully-reactive-an-in-depth-explanation-of-mobservable-55995262a254
-https://github.com/mobxjs/mobx/issues/248
+Application State > __MobX__
+ 
+Scroll based animations > __RxJS__
 
-[Building yur own Observable](https://toddmotto.com/rxjs-observables-observers-operators)
-https://github.com/mobxjs/mobx/wiki/Mobx-vs-Reactive-Stream-Libraries-(RxJS,-Bacon,-etc)
+![right fit autoplay mute loop](videos/dazn.mp4)
 
+---
+
+#[fit] Thank __you__
+
+<br />
+
+_slides_ [github.com/maxgallo/talk-rxjs-mobx](https://github.com/maxgallo/talk-rxjs-mobx)
+
+_twitter_ @\_maxgallo
+_other_ maxgallo.io
 
 
 
