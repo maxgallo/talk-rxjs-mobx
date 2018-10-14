@@ -78,13 +78,14 @@ okComputer.playCount = 20; // Ok Computer PlayCount: 20
 
 ---
 
+[.build-lists: true]
 # __MobX__ code _first impressions_
 
 <br/>
 
 - Syntax _is close to the language_
 - _No explicit_ Subscription
-- trasparent _functional reactive programming_ 
+- transparent _functional reactive programming_
 
 ---
 
@@ -92,6 +93,7 @@ okComputer.playCount = 20; // Ok Computer PlayCount: 20
 
 ---
 
+[.build-lists: true]
 # __MobX__ *from the* inside
 
 - _Doesn't care about the_ past
@@ -122,6 +124,7 @@ okComputer.playCount = 2;  // Ok Computer2
 okComputer.playCount++;    // Ok Computer3
 ```
 
+^ - Computed values are observables
 
 ---
 
@@ -158,6 +161,7 @@ observable.subscribe(
 ```
 ---
 
+[.build-lists: true]
 # __RxJS__ code _first impressions_
 <br/>
 
@@ -172,6 +176,7 @@ observable.subscribe(
 
 ---
 
+[.build-lists: true]
 # __RxJS__ *from the inside*
 
 <br />
@@ -241,6 +246,7 @@ Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
 
 ---
 
+[.build-lists: true]
 #[fit] When _should I use_ __both__ ?
 
 
