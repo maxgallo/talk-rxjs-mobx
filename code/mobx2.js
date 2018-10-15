@@ -1,7 +1,7 @@
-//10 min (30 lines visible on screen)
-// const { observable, autorun } = require('./lib/mobx.js');
-let accessedObjects = [];
-const reactions = {};
+// const { observable, autorun } = require('mobx');
+
+let accessedObservables = [];
+const derivationGraph = {}; // observableId > reaction
 
 function observable(toObserve) {
     const observableObject = {};
@@ -16,12 +16,12 @@ function observable(toObserve) {
             key,
             {
                 get() {
-                    accessedObjects.push(getObservableId(key));
+                    accessedObservables.push(getObservableId(key));
                     return toObserve[key];
                 },
                 set(value) {
                     toObserve[key] = value;
-                    (reactions[getObservableId(key)] || []).forEach(
+                    (derivationGraph[getObservableId(key)] || []).forEach(
                         func => func()
                     );
                 },
@@ -34,11 +34,11 @@ function observable(toObserve) {
 }
 
 function autorun(runner) {
-    accessedObjects = [];
+    accessedObservables = [];
     runner();
-    accessedObjects.forEach(objectId => {
-        reactions[objectId] = reactions[objectId] || [];
-        reactions[objectId].push(runner);
+    accessedObservables.forEach(objectId => {
+        derivationGraph[objectId] = derivationGraph[objectId] || [];
+        derivationGraph[objectId].push(runner);
     });
 }
 
