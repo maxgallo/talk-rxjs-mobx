@@ -26,7 +26,7 @@ _more:_ maxgallo.io
 
 ---
 
-#[fit] Let me introduce __MobX__
+#[fit] Introducing __MobX__
 <br/>
 
 > a battle tested, simple and scalable
@@ -35,18 +35,13 @@ _more:_ maxgallo.io
 
 ---
 
-#[fit] Let me introduce __RxJS__
+#[fit] Introducing __RxJS__
 <br/>
 
-> An API for asynchronous programming
+_Part of the_ Reactive X _Family_
+
+> API for asynchronous programming
 with observable streams
-
-or
-
-> Reactive programming _[with RxJS]_ is programming
-> with asynchronous data streams
--- André Staltz
-
 
 ---
 
@@ -156,7 +151,15 @@ okComputer.playCount++;    // Ok Computer3
 
 # __MobX *Deep Dive*__ Derivation Graph
 
-![inline](diagrams/derivationGraph/derivationGraph.pdf)
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+_Creation_ Flow _<---_ __vs__ _---> Reactions_ Flow
+
+![original 150%](diagrams/derivationGraph/derivationGraph.pdf)
 
 ^ - First time from right to left
 then left to right for changes
@@ -280,18 +283,18 @@ Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
 ---
 
 [.build-lists: true]
-#[fit] When _should I use_ __both__ ?
+#[fit] Can _I use_ __both__ ?
+
+__Yes!__
 
 
-<br/>
-
-1. **RxJS** _handles an_ Heavy Task
-2. _it changes the_ Application State, _managed by_ **MobX**
+1. __*RxJS*__ _handles an_ Heavy Task
+2. _it changes the_ Application State, _managed by_ __*MobX*__
 3. Reaction: _the view is updated_
 
 ---
 
-### [fit] When _should I use_ __both__ ? 
+### [fit] Can _I use_ __both__ ?
 #[fit] __real life__
 #[fit] __example__
 
