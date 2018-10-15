@@ -26,6 +26,30 @@ _more:_ maxgallo.io
 
 ---
 
+#[fit] Let me introduce __MobX__
+<br/>
+
+> a battle tested, simple and scalable
+> state management library
+-- Michel Weststrate
+
+---
+
+#[fit] Let me introduce __RxJS__
+<br/>
+
+> An API for asynchronous programming
+with observable streams
+
+or
+
+> Reactive programming _[with RxJS]_ is programming
+> with asynchronous data streams
+-- André Staltz
+
+
+---
+
 [.build-lists: true]
 
 #[fit] _Here's_ __the plan__
@@ -40,7 +64,7 @@ _more:_ maxgallo.io
 ![right](images/me1996.jpg)
 
 # [fit] Reinventing
-## [fit] the weel
+## [fit] the wheel
 
 ## _by_
 
@@ -85,7 +109,7 @@ okComputer.playCount = 20; // Ok Computer PlayCount: 20
 
 - Syntax _is close to the language_
 - _No explicit_ Subscription
-- transparent _functional reactive programming_
+- transparent _reactive programming_
 
 ---
 
@@ -99,7 +123,9 @@ okComputer.playCount = 20; // Ok Computer PlayCount: 20
 - _Doesn't care about the_ past
 - _act as a_ proxy in front of JavaScript
 - _All reactions are_ Synchronous
-- Derivation Graph
+- _use_ Derivation Graph
+
+^ Meta programming with ES6 Proxies
 
 ---
 
@@ -132,6 +158,9 @@ okComputer.playCount++;    // Ok Computer3
 
 ![inline](diagrams/derivationGraph/derivationGraph.pdf)
 
+^ - First time from right to left
+then left to right for changes
+
 ---
 
 ![fill](images/bg.jpg)
@@ -163,12 +192,14 @@ observable.subscribe(
 
 [.build-lists: true]
 # __RxJS__ code _first impressions_
-<br/>
 
-- Syntax _is less familiar than MobX_
+- Syntax _is library specific_
 - Explicit Subscription
 - Observable _[TC39 stage 1](https://github.com/tc39/proposals#stage-1)_
 - Pipeline operator _[TC39 stage 1](https://github.com/tc39/proposals#stage-1)_
+
+^ MutationObserver is a method for observing and reacting to changes to the DOM.
+It's already available in many browser.
 
 ---
 
@@ -179,11 +210,11 @@ observable.subscribe(
 [.build-lists: true]
 # __RxJS__ *from the inside*
 
-<br />
 
 - _Made of_ reusable parts > **Streams**
 - custom operators
 - Lazy evaluation
+- _Offer a_ Standard contract _between parts_
 - Synchronous _by default_ > **Schedulers**
 
 <!--
@@ -220,8 +251,8 @@ Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
 
 | | __Paradigm__ | __Execution__ | __Syntax__ | __Observables__ |
 | :---: | :---: | :---: | :---: | :---: |
-| __MobX__ | Transparent _Functional Reactive Programming_ | _Synchronous_ | _Plain Javascript_ | _Observable Values_ |
-| __RxJS__ | Event Stream _Functional Reactive Programming_ | _Synchronous & Asynchronous_  | _Custom*_ | _Observable Events_ | 
+| __MobX__ | Transparent _Reactive Programming_ | _Synchronous_ | _Plain Javascript_ | _Observable Values_ |
+| __RxJS__ | Event Stream _Functional Reactive Programming_ | _Synchronous & Asynchronous_  | _Library Specific*_ | _Observable Events_ |
 
 ---
 
@@ -237,18 +268,22 @@ Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
 ---
 
 [.build-lists: true]
+
 #[fit] When _should I use_ __RxJS__ ?
+
+<br />
+
 - events & values
 - _work with_ time
-- heavy __I/O__ tasks
 - low-level control
-
 
 ---
 
 [.build-lists: true]
 #[fit] When _should I use_ __both__ ?
 
+
+<br/>
 
 1. **RxJS** _handles an_ Heavy Task
 2. _it changes the_ Application State, _managed by_ **MobX**
