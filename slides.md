@@ -210,6 +210,20 @@ It's already available in many browser.
 
 ---
 
+# __RxJS *Operators*__
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+_Operator_ 1 _-->_> _Operator_ 2 _-->_> _Operator_ 3
+
+![original 150%](diagrams/rxjsCode/rxjsCode.pdf)
+
+---
+
 [.build-lists: true]
 # __RxJS__ *from the inside*
 
@@ -250,12 +264,10 @@ Queue __*/*__ Asap __*/*__ Async __*/*__ AnimationFrame __*/*__ VirtualTime
 
 ---
 
-# Side _by_ Side
-
 | | __Paradigm__ | __Execution__ | __Syntax__ | __Observables__ |
 | :---: | :---: | :---: | :---: | :---: |
-| __MobX__ | Transparent _Reactive Programming_ | _Synchronous_ | _Plain Javascript_ | _Observable Values_ |
-| __RxJS__ | Event Stream _Functional Reactive Programming_ | _Synchronous & Asynchronous_  | _Library Specific*_ | _Observable Events_ |
+| __MobX__ | Transparent _Reactive Programming_ | _Sync_ | _Plain Javascript_ | _Observable Values_ |
+| __RxJS__ | Event Stream _Functional Reactive Programming_ | _Sync & <br/> Async_  | _Library Specific*_ | _Observable Events_ |
 
 ---
 
