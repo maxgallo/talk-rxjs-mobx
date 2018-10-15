@@ -30,9 +30,10 @@ function createObservable(operator) {
     }
 }
 
+// sourceObservable > currentObservable > nextObservable
 function map(mapFunction) {
     return sourceObservable => {
-        return createObservable(destinationNext => {
+        const currentObservable = createObservable(destinationNext => {
             sourceObservable.subscribe(
                 value => {
                     const newValue = mapFunction(value);
@@ -40,6 +41,7 @@ function map(mapFunction) {
                 }
             );
         })
+        return currentObservable;
     }
 }
 
