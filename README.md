@@ -2,4 +2,4 @@
 
 Slides and example of the talk
 
-title.png
+![Title](title.png)
