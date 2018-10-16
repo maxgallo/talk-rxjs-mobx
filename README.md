@@ -15,3 +15,11 @@ In the talk there are two section of live coding.
 - after: [rxjs1.js](code/rxjs1.js)
 
 ![Title](title.png)
+
+
+## Tools
+What I used for these slides
+
+- Slides: [Deckset](https://www.decksetapp.com/)
+- Draws: [draw.io](https://www.draw.io)
+- Live Coding: Vim + [heaving configuration](https://github.com/maxgallo/dotfiles) + [nodemon](https://github.com/remy/nodemon) for hot reloading
