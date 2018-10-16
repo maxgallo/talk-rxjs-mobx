@@ -1,49 +1,46 @@
 // const { observable, autorun } = require('mobx');
 
-let calledObservables = [];
-const reactions = {};
+let accessedObservables = [];
+const derivationGraph = {}; // observableId > reaction
 
-function observable(objectToObserve) {
+function observable(toObserve) {
     const observableObject = {};
-
-    const observablePrefix = Math.random();
+    const uniqueId = Math.random();
     function getObservableId(key) {
-        return observablePrefix + key;
+        return uniqueId + key;
     }
 
-    Object.keys(objectToObserve).forEach( key => {
+    Object.keys(toObserve).forEach(key => {
         Object.defineProperty(
             observableObject,
             key,
             {
                 get() {
-                    calledObservables.push(getObservableId(key))
-                    return objectToObserve[key];
+                    accessedObservables.push(getObservableId(key));
+                    return toObserve[key];
                 },
                 set(value) {
-                    objectToObserve[key] = value;
-                    reactions[getObservableId(key)].forEach(func => func());
-                }
+                    toObserve[key] = value;
+                    (derivationGraph[getObservableId(key)] || []).forEach(
+                        func => func()
+                    );
+                },
             }
-        )
+        );
+    });
 
-    })
 
     return observableObject;
 }
 
 function autorun(runner) {
-    // 1. track which observable I call during execution
-    calledObservables = [];
+    accessedObservables = [];
     runner();
-    // 2. re-evaluate the function every time one of those observable change
-    calledObservables.forEach(observableId => {
-        reactions[observableId] = reactions[observableId] || [];
-        reactions[observableId].push(runner);
+    accessedObservables.forEach(objectId => {
+        derivationGraph[objectId] = derivationGraph[objectId] || [];
+        derivationGraph[objectId].push(runner);
     });
 }
-
-// -------------------------------
 
 const album1 = observable({
     title: "OK Computer",
@@ -52,17 +49,20 @@ const album1 = observable({
 });
 
 const album2 = observable({
-    title: "Rainbows",
+    title: "In Rainbows",
     year: 2007,
     playCount: 0
 });
 
-autorun(() => { console.log(`Play Count1: ${album1.playCount}`)});
-autorun(() => { console.log(`Play Count2: ${album2.playCount}`)});
+autorun(() => { console.log(`Album 1 PlayCount: ${album1.playCount}`)});
+autorun(() => { console.log(`Album 2 PlayCount: ${album2.playCount}`)});
 
 console.log('\n reactions \n');
 
 album1.playCount = 2;
 album1.playCount = 20;
 album2.playCount = 3;
+album1.playCount = 200;
+
+console.log(album1.playCount);
 
