@@ -1,18 +1,19 @@
 // const { from } = require('rxjs');
 // const { map, filter } = require('rxjs/operators');
 
-function from(initialData) {
+function from(initialData){
     return {
         pipe: (...pipeFunctions) => {
             return {
                 subscribe: (onNext, onError, onComplete) => {
+
                     const dataObservable = createObservable(x => initialData.forEach(x))
 
                     let currentObservable = dataObservable;
 
                     pipeFunctions.forEach(pipeFunc => {
-                        currentObservable = pipeFunc(currentObservable);
-                    });
+                        currentObservable = pipeFunc(currentObservable)
+                    })
 
                     currentObservable.subscribe(onNext);
                     onComplete();
@@ -24,38 +25,34 @@ function from(initialData) {
 
 function createObservable(operator) {
     return {
-        subscribe: onNext => {
-            operator(onNext);
+        subscribe: innerOnNext => {
+            operator(innerOnNext)
         }
     }
 }
 
-// sourceObservable > currentObservable > nextObservable
-function map(mapFunction) {
+function map(mapFunction){
     return sourceObservable => {
         const currentObservable = createObservable(destinationNext => {
-            sourceObservable.subscribe(
-                value => {
-                    const newValue = mapFunction(value);
-                    destinationNext(newValue);
-                }
-            );
+            sourceObservable.subscribe(value => {
+                const newValue = mapFunction(value)
+                destinationNext(newValue);
+            })
         })
         return currentObservable;
     }
 }
 
-function filter(filterFunction) {
+function filter(filterFunction){
     return sourceObservable => {
-        return createObservable(destinationNext => {
-            sourceObservable.subscribe(
-                value => {
-                    if (filterFunction(value)) {
-                        destinationNext(value);
-                    }
+        const currentObservable = createObservable(destinationNext => {
+            sourceObservable.subscribe(value => {
+                if(filterFunction(value)){
+                    destinationNext(value);
                 }
-            )
+            })
         })
+        return currentObservable;
     }
 }
 

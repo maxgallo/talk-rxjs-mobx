@@ -1,44 +1,46 @@
 // const { observable, autorun } = require('mobx');
+const accessedObservables = [];
+const derivationGraph = {};
 
-let accessedObservables = [];
-const derivationGraph = {}; // observableId > reaction
+function observable(targetObject){
+    const observableObject = {}
 
-function observable(toObserve) {
-    const observableObject = {};
-    const uniqueId = Math.random();
-    function getObservableId(key) {
-        return uniqueId + key;
+    const unique = Math.random()
+    function getObservableId(key){
+        return unique + key;
     }
 
-    Object.keys(toObserve).forEach(key => {
+
+    Object.keys(targetObject).forEach(objectKey => {
         Object.defineProperty(
             observableObject,
-            key,
+            objectKey,
             {
-                get() {
-                    accessedObservables.push(getObservableId(key));
-                    return toObserve[key];
+                get(){
+                    accessedObservables.push(getObservableId(objectKey))
+                    return targetObject[objectKey];
                 },
-                set(value) {
-                    toObserve[key] = value;
-                    (derivationGraph[getObservableId(key)] || []).forEach(
-                        func => func()
-                    );
-                },
+                set(value){
+                    targetObject[objectKey] = value;
+                    derivationGraph[getObservableId(objectKey)].forEach(runner => {
+                        runner()
+                    })
+                }
             }
-        );
-    });
+        )
+    })
 
 
     return observableObject;
 }
 
-function autorun(runner) {
-    accessedObservables = [];
+function autorun(runner){
+    accessedObservables.length = 0;
     runner();
+    console.log(accessedObservables);
     accessedObservables.forEach(objectId => {
         derivationGraph[objectId] = derivationGraph[objectId] || [];
-        derivationGraph[objectId].push(runner);
+        derivationGraph[objectId].push(runner)
     });
 }
 
@@ -50,7 +52,7 @@ const album1 = observable({
 
 const album2 = observable({
     title: "In Rainbows",
-    year: 2007,
+    year: 2020,
     playCount: 0
 });
 
@@ -61,8 +63,8 @@ console.log('\n reactions \n');
 
 album1.playCount = 2;
 album1.playCount = 20;
-album2.playCount = 3;
-album1.playCount = 200;
 
-console.log(album1.playCount);
+album2.playCount = 2000
 
+
+console.log('is sync?')
