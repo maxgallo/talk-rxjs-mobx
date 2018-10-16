@@ -318,6 +318,20 @@ Scroll based animations > __RxJS__
 
 ---
 
+## __Discover more__ _about_ [MobX](https://github.com/mobxjs/mobx) _&_ [RxJS](https://github.com/ReactiveX/rxjs/) 📖
+
+- [Transparent Reactive Programming (meteor)](https://github.com/meteor/docs/blob/version-NEXT/long-form/tracker-manual.md)
+- [TFRP Discussion](https://github.com/mobxjs/mobx/issues/220)
+- [MobX in-depth explanation __Michel Weststrate__](https://hackernoon.com/becoming-fully-reactive-an-in-depth-explanation-of-mobservable-55995262a254)
+- [MobX autorun runtime subscription] (https://github.com/mobxjs/mobx/issues/248)
+
+- [Reactive Programming Introduction __André Stalz__](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
+- [Building Observables __Ben Lesh__](https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87)
+- [Building yur own Observable __Todd Motto__](https://toddmotto.com/rxjs-observables-observers-operators)
+```
+
+---
+
 #[fit] Thank __you__
 
 <br />
