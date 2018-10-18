@@ -7,7 +7,7 @@ function from(initialData){
             return {
                 subscribe: (onNext, onError, onComplete) => {
                     let errorFired = false;
-                    const wrappedOnError = () => {
+                    const internalOnError = () => {
                         errorFired = true;
                         onError()
                     }
@@ -21,7 +21,7 @@ function from(initialData){
                     let currentObservable = dataObservable;
 
                     pipeFunctions.forEach(pipeFunc => {
-                        currentObservable = pipeFunc(currentObservable, wrappedOnError)
+                        currentObservable = pipeFunc(currentObservable, internalOnError)
                     })
 
                     currentObservable.subscribe(onNext);
